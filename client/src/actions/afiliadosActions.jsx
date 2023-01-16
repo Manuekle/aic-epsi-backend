@@ -67,13 +67,13 @@ export const getAfiliadoDetails = (id) => async (dispatch) => {
 };
 
 // ? POST AFILIADO
-export const createAfiliado = () => async (dispatch) => {
+export const createAfiliado = (res) => async (dispatch) => {
   try {
     dispatch({
       type: AFILIADOS_CREATE_REQUEST
     });
 
-    const { data } = await axios.post(`http://localhost:4000/afiliados`, {});
+    const { data } = await axios.post(`http://localhost:4000/afiliados`, res);
     dispatch({
       type: AFILIADOS_CREATE_SUCCESS,
       payload: data

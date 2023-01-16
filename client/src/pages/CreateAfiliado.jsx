@@ -10,8 +10,9 @@ import React, { useState, useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { motion } from 'framer-motion';
 
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import {
   User,
@@ -22,18 +23,16 @@ import {
   Scales,
   MapTrifold,
   HouseSimple,
-  MapPin
+  MapPin,
+  Mountains,
+  FlagBanner
 } from 'phosphor-react';
-
-import { AFILIADOS_UPDATE_RESET } from '../constants/afiliadosConstants';
+import { AFILIADOS_CREATE_RESET } from '../constants/afiliadosConstants';
 
 import { generos, tipoDocumento, estadoCivil } from '../utils/constantes';
 import { departamentos } from '../utils/departamentos';
 
-import {
-  getAfiliadoDetails,
-  updateAfiliado
-} from '../actions/afiliadosActions';
+import { createAfiliado } from '../actions/afiliadosActions';
 
 // loader
 import Loader from '../components/loader';
@@ -41,65 +40,40 @@ import Loader from '../components/loader';
 function CreateAfiliado() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const params = useParams();
   const [formData, setFormData] = useState(false);
 
-  const [name, setName] = useState('');
-  const [mail, setMail] = useState('');
-  const [document, setDocument] = useState('');
-  const [numDocument, setNumDocument] = useState('');
-  const [gender, setGender] = useState('');
-  const [statusCivil, setStatusCivil] = useState('');
-  const [muni, setMuni] = useState('');
-  const [depa, setDepa] = useState('');
-  const [direction, setDirection] = useState('');
-  const [indigen, setIndigen] = useState(false);
-
-  const afiliadoDetail = useSelector((state) => state.afiliadoDetail);
-  const { loading, afiliados } = afiliadoDetail;
-  console.log(afiliados);
-
-  const afiliadoUpdate = useSelector((state) => state.afiliadoUpdate);
-  const { success: successUpdate } = afiliadoUpdate;
+  const afiliadoCreate = useSelector((state) => state.afiliadoCreate);
+  const { success: successCreate } = afiliadoCreate;
 
   useEffect(() => {
-    if (successUpdate) {
-      dispatch({ type: AFILIADOS_UPDATE_RESET });
+    if (successCreate) {
+      dispatch({ type: AFILIADOS_CREATE_RESET });
       setTimeout(() => {
         navigate('/');
       }, 1000);
-    } else if (!afiliados.nombre || afiliados.id !== Number(params.id)) {
-      dispatch(getAfiliadoDetails(params.id));
-    } else {
-      setName(afiliados.nombre);
-      setMail(afiliados.correo_electronico);
-      setDocument(afiliados.tipo_documento);
-      setNumDocument(afiliados.numero_documento);
-      setGender(afiliados.genero);
-      setStatusCivil(afiliados.estado_civil);
-      setMuni(afiliados.municipio);
-      setDepa(afiliados.departamento);
-      setDirection(afiliados.direccion);
-      setIndigen(afiliados.indigena);
     }
-  }, [dispatch, afiliados, params.id, successUpdate, navigate]);
+  }, [dispatch, navigate, successCreate]);
 
   // console.log(departamentos);
   return (
-    <section className="container mx-auto xl:px-56 px-8 w-full">
-      <div className="border-2 border-zinc-600 px-8 py-4 rounded-md bg-zinc-900">
-        <h1 className="text-lg font-bold tracking-wide text-white">
-          Crear Afiliado
-        </h1>
-        <hr className="border-zinc-600 my-4" />
-        {loading ? (
+    <motion.div
+      initial={{ y: 300, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: 300, opacity: 0 }}
+      transition={{
+        type: 'spring',
+        stiffness: 260,
+        damping: 20
+      }}
+    >
+      <section className="container mx-auto xl:px-56 px-8 w-full">
+        <div className="border-2 border-zinc-600 px-8 py-4 rounded-md bg-zinc-900">
           <h1 className="text-lg font-bold tracking-wide text-white">
-            Cargando...
+            Crear Afiliado
           </h1>
-        ) : (
+          <hr className="border-zinc-600 my-4" />
           <Formik
             initialValues={{
-              id: params.id,
               nombre: '',
               correo_electronico: '',
               tipo_documento: '',
@@ -109,7 +83,9 @@ function CreateAfiliado() {
               municipio: '',
               departamento: '',
               direccion: '',
-              indigena: false
+              indigena: false,
+              pueblo: null,
+              cabildo: null
             }}
             validate={(res) => {
               const error = {};
@@ -143,6 +119,12 @@ function CreateAfiliado() {
               } else if (!/^[0-9]{1,40}$/.test(res.numero_documento)) {
                 error.numero_documento =
                   'El numero de documento solo puede contener numeros';
+              } else if (res.numero_documento.length < 8) {
+                error.numero_documento =
+                  'El numero de documento debe tener minimo 8 caracteres';
+              } else if (res.numero_documento.length > 10) {
+                error.numero_documento =
+                  'El numero de documento debe tener maximo 10 caracteres';
               }
 
               // Validacion genero
@@ -170,12 +152,23 @@ function CreateAfiliado() {
                 error.direccion = 'Por favor ingresa una direccion';
               }
 
+              if (res.indigena) {
+                // Validacion cabildo
+                if (!res.cabildo) {
+                  error.cabildo = 'Por favor ingresa el cabildo o resguardo';
+                }
+                // Validacion pueblo
+                if (!res.pueblo) {
+                  error.pueblo = 'Por favor ingresa el pueblo';
+                }
+              }
+
               return error;
             }}
             onSubmit={(res, { resetForm }) => {
               resetForm();
               setFormData(true);
-              dispatch(updateAfiliado(res));
+              dispatch(createAfiliado(res));
               setTimeout(() => {
                 setFormData(false);
               }, 1000);
@@ -195,8 +188,6 @@ function CreateAfiliado() {
                         type="text"
                         id="nombre"
                         name="nombre"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
                         className="relative pl-11 w-full bg-zinc-800 border border-zinc-600 placeholder:text-white/70 text-white rounded-md px-4 py-2 text-sm font-bold outline-none"
                         placeholder="Nombre Completo"
                       />
@@ -221,8 +212,6 @@ function CreateAfiliado() {
                         type="email"
                         id="correo_electronico"
                         name="correo_electronico"
-                        value={mail}
-                        onChange={(e) => setMail(e.target.value)}
                         className="relative pl-11 w-full bg-zinc-800 border border-zinc-600 placeholder:text-white/70 text-white rounded-md px-4 py-2 text-sm font-bold outline-none"
                         placeholder="Correo Electronico"
                       />
@@ -247,8 +236,6 @@ function CreateAfiliado() {
                         as="select"
                         id="tipo_documento"
                         name="tipo_documento"
-                        value={document}
-                        onChange={(e) => setDocument(e.target.value)}
                         className="relative pl-11 w-full bg-zinc-800 border border-zinc-600 placeholder:text-white/70 text-white rounded-md px-4 py-2 text-sm font-bold outline-none"
                         placeholder="Seleccione un tipo de documento"
                       >
@@ -282,8 +269,6 @@ function CreateAfiliado() {
                         type="text"
                         id="numero_documento"
                         name="numero_documento"
-                        value={numDocument}
-                        onChange={(e) => setNumDocument(e.target.value)}
                         className="relative pl-11 w-full bg-zinc-800 border border-zinc-600 placeholder:text-white/70 text-white rounded-md px-4 py-2 text-sm font-bold outline-none"
                         placeholder="Numero de Documento"
                       />
@@ -308,8 +293,6 @@ function CreateAfiliado() {
                         as="select"
                         id="genero"
                         name="genero"
-                        value={gender}
-                        onChange={(e) => setGender(e.target.value)}
                         className="relative pl-11 w-full bg-zinc-800 border border-zinc-600 placeholder:text-white/70 text-white rounded-md px-4 py-2 text-sm font-bold outline-none"
                         placeholder="Seleccione su género"
                       >
@@ -343,8 +326,6 @@ function CreateAfiliado() {
                         as="select"
                         id="estado_civil"
                         name="estado_civil"
-                        value={statusCivil}
-                        onChange={(e) => setStatusCivil(e.target.value)}
                         className="relative pl-11 w-full bg-zinc-800 border border-zinc-600 placeholder:text-white/70 text-white rounded-md px-4 py-2 text-sm font-bold outline-none"
                         placeholder="Seleccione un tipo de documento"
                       >
@@ -378,8 +359,6 @@ function CreateAfiliado() {
                         as="select"
                         id="municipio"
                         name="municipio"
-                        value={muni}
-                        onChange={(e) => setMuni(e.target.value)}
                         className="relative pl-11 w-full bg-zinc-800 border border-zinc-600 placeholder:text-white/70 text-white rounded-md px-4 py-2 text-sm font-bold outline-none"
                         placeholder="Seleccione el municipio"
                       >
@@ -407,8 +386,6 @@ function CreateAfiliado() {
                         as="select"
                         id="departamento"
                         name="departamento"
-                        value={depa}
-                        onChange={(e) => setDepa(e.target.value)}
                         className="relative pl-11 w-full bg-zinc-800 border border-zinc-600 placeholder:text-white/70 text-white rounded-md px-4 py-2 text-sm font-bold outline-none"
                         placeholder="Seleccione el municipio"
                       >
@@ -436,8 +413,6 @@ function CreateAfiliado() {
                         type="text"
                         id="direccion"
                         name="direccion"
-                        value={direction}
-                        onChange={(e) => setDirection(e.target.value)}
                         className="relative pl-11 w-full bg-zinc-800 border border-zinc-600 placeholder:text-white/70 text-white rounded-md px-4 py-2 text-sm font-bold outline-none"
                         placeholder="Dirección"
                       />
@@ -456,15 +431,65 @@ function CreateAfiliado() {
                       )}
                     />
                   </div>
+                  {values.indigena && (
+                    <>
+                      <div className="xl:col-span-1 col-span-3">
+                        <span className="flex flex-row gap-2 relative">
+                          <Field
+                            type="text"
+                            id="pueblo"
+                            name="pueblo"
+                            className="relative pl-11 w-full bg-zinc-800 border border-zinc-600 placeholder:text-white/70 text-white rounded-md px-4 py-2 text-sm font-bold outline-none"
+                            placeholder="Pueblo"
+                          />
+                          <Mountains
+                            size={18}
+                            weight="bold"
+                            className="absolute top-1/2 left-3 transform -translate-y-1/2 text-white"
+                          />
+                        </span>
+                        <ErrorMessage
+                          name="pueblo"
+                          component={() => (
+                            <div className="text-red-500 text-xs pl-1 pt-2 font-bold tracking-wide">
+                              {errors.pueblo}
+                            </div>
+                          )}
+                        />
+                      </div>
+                      <div className="xl:col-span-1 col-span-3">
+                        <span className="flex flex-row gap-2 relative">
+                          <Field
+                            type="text"
+                            id="cabildo"
+                            name="cabildo"
+                            className="relative pl-11 w-full bg-zinc-800 border border-zinc-600 placeholder:text-white/70 text-white rounded-md px-4 py-2 text-sm font-bold outline-none"
+                            placeholder="Cabildo o resguardo"
+                          />
+                          <FlagBanner
+                            size={18}
+                            weight="bold"
+                            className="absolute top-1/2 left-3 transform -translate-y-1/2 text-white"
+                          />
+                        </span>
+                        <ErrorMessage
+                          name="cabildo"
+                          component={() => (
+                            <div className="text-red-500 text-xs pl-1 pt-2 font-bold tracking-wide">
+                              {errors.cabildo}
+                            </div>
+                          )}
+                        />
+                      </div>
+                    </>
+                  )}
                   <div className="cxl:col-span-1 col-span-3">
                     <span className="text-white font-bold text-sm flex flex-row gap-1 items-center">
                       <Field
                         type="checkbox"
                         name="indigena"
                         id="toggle"
-                        value={indigen}
-                        onChange={(e) => setIndigen(e.target.value)}
-                        className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                        className="appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-amber-400 checked:border-amber-400 fill-black focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                       />
                       <label
                         htmlFor="indigena"
@@ -476,37 +501,28 @@ function CreateAfiliado() {
                   </div>
                 </div>
                 <div className="xl:col-span-1 col-span-3 flex justify-center">
-                  {values.indigena ? (
-                    <button
-                      type="submit"
-                      className="text-sm text-white border font-bold tracking-wide rounded-md border-white/20 bg-zinc-800 w-56 h-10"
-                    >
-                      Siguiente
-                    </button>
-                  ) : (
-                    <button
-                      type="submit"
-                      className="text-sm text-white border font-bold tracking-wide rounded-md border-white/20 bg-zinc-800 w-56 h-10"
-                    >
-                      {!formData && (
-                        <h1 className="text-white/80 hover:text-white text-sm font-normal flex justify-center">
-                          Registrar
-                        </h1>
-                      )}
-                      {formData && (
-                        <span className="flex justify-center ">
-                          <Loader color="#eee" size={20} />
-                        </span>
-                      )}
-                    </button>
-                  )}
+                  <button
+                    type="submit"
+                    className="text-sm text-white border font-bold tracking-wide rounded-md border-white/20 bg-zinc-800 w-56 h-10"
+                  >
+                    {!formData && (
+                      <h1 className="text-white/80 hover:text-white text-sm font-normal flex justify-center">
+                        Registrar
+                      </h1>
+                    )}
+                    {formData && (
+                      <span className="flex justify-center">
+                        <Loader color="#eee" size={20} />
+                      </span>
+                    )}
+                  </button>
                 </div>
               </Form>
             )}
           </Formik>
-        )}
-      </div>
-    </section>
+        </div>
+      </section>
+    </motion.div>
   );
 }
 

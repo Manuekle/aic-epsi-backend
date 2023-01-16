@@ -69,7 +69,7 @@ function tableAfiliados({ data }) {
                   <h1 className="ml-2">Detalles</h1>
                 </Link>
                 <Link
-                  to={`createAffiliate/${data.id}/edit`}
+                  to={`editAffiliate/${data.id}`}
                   className="flex flex-row gap-1 text-white/80 font-bold text-sm px-4 py-2 bg-[#111113]/50 hover:bg-[#111113] cursor-pointer items-center"
                 >
                   <PencilSimple size={16} weight="light" />
