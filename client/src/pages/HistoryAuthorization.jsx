@@ -1,32 +1,28 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-console */
 /* eslint-disable no-nested-ternary */
-import React, { useState, useEffect } from 'react';
+/* eslint-disable no-console */
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { listAfiliados } from '../actions/afiliadosActions';
+import { listAutorizaciones } from '../actions/autorizacionActions';
 
-import TableAfiliados from '../components/tableAfiliados';
+import TableAutorizaciones from '../components/tableAutorizaciones';
 
-function HomePage() {
+function HistoryAuthorization() {
   const dispatch = useDispatch();
   const location = useLocation();
   const keyword = location.search;
 
   useEffect(() => {
-    dispatch(listAfiliados(keyword));
+    dispatch(listAutorizaciones(keyword));
   }, [dispatch, keyword]);
 
-  const afiliadosList = useSelector((state) => state.afiliadosList);
-  const { loading, error, afiliados } = afiliadosList;
-  console.log(afiliadosList);
-
+  const autorizacionList = useSelector((state) => state.autorizacionList);
+  const { loading, error, autorizacion } = autorizacionList;
   return (
     <section className="container mx-auto xl:px-56 px-8 w-full">
       <div className="border-2 border-zinc-600 bg-[#18181B] px-8 py-4 rounded-md">
         <h1 className="text-lg font-bold text-white tracking-wide">
-          Tabla de Afiliados
+          Historial de Autorizaciones
         </h1>
         <hr className="my-4 border-zinc-600" />
         {loading ? (
@@ -45,37 +41,31 @@ function HomePage() {
                           scope="col"
                           className="text-sm font-medium text-white/80 px-6 py-4 text-left"
                         >
-                          Nombre
+                          Afiliado
                         </th>
                         <th
                           scope="col"
                           className="text-sm font-medium text-white/80 px-6 py-4 text-left"
                         >
-                          Género
+                          Diagnostico Principal
                         </th>
                         <th
                           scope="col"
                           className="text-sm font-medium text-white/80 px-6 py-4 text-left"
                         >
-                          Estado Civil
+                          Diagnostico Relacionado
                         </th>
                         <th
                           scope="col"
                           className="text-sm font-medium text-white/80 px-6 py-4 text-left"
                         >
-                          Documento
+                          Fecha de Autorización
                         </th>
                         <th
                           scope="col"
                           className="text-sm font-medium text-white/80 px-6 py-4 text-left"
                         >
-                          Municipio
-                        </th>
-                        <th
-                          scope="col"
-                          className="text-sm font-medium text-white/80 px-6 py-4 text-left"
-                        >
-                          Dirección
+                          Regimen
                         </th>
                         <th
                           scope="col"
@@ -84,8 +74,8 @@ function HomePage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {afiliados.map((data) => (
-                        <TableAfiliados key={data.id} data={data} />
+                      {autorizacion.map((data) => (
+                        <TableAutorizaciones key={data.id} data={data} />
                       ))}
                     </tbody>
                   </table>
@@ -107,4 +97,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default HistoryAuthorization;

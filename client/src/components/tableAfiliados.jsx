@@ -13,7 +13,7 @@ import {
 import { Link } from 'react-router-dom';
 import * as Popover from '@radix-ui/react-popover';
 
-function table({ data }) {
+function tableAfiliados({ data }) {
   return (
     <tr className="text-white/80 text-sm text-normal transition duration-300 ease-in-out hover:bg-zinc-800">
       <td className="text-white/80 text-sm font-normal px-6 py-4 text-left capitalize tracking-wide">
@@ -94,4 +94,4 @@ function table({ data }) {
   );
 }
 
-export default table;
+export default tableAfiliados;

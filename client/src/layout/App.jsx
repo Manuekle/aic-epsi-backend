@@ -8,8 +8,9 @@ import CreateButton from '../components/createButton';
 
 // pages
 import HomePage from '../pages/HomePage';
-import TestPage from '../pages/TestPage';
+// import TestPage from '../pages/TestPage';
 import NotFoundPage from '../pages/NotFoundPage';
+import HistoryAuthorization from '../pages/HistoryAuthorization';
 import CreateAfiliado from '../pages/CreateAfiliado';
 import CreateAuthorization from '../pages/CreateAuthorization';
 import DetailAfiliado from '../pages/DetailAfiliado';
@@ -39,9 +40,12 @@ function App() {
         </section>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/test" element={<TestPage />} />
           <Route
-            path="/createAuthorization"
+            path="/historyAuthorization"
+            element={<HistoryAuthorization />}
+          />
+          <Route
+            path="/createAuthorization/:id"
             element={<CreateAuthorization />}
           />
           <Route path="/createAffiliate/:id" element={<CreateAfiliado />} />

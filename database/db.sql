@@ -22,7 +22,8 @@ CREATE TABLE indigena (
     cabildo VARCHAR(100) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (id) REFERENCES afiliados(id)
+    afiliados_id INTEGER,
+    FOREIGN KEY (afiliados_id) REFERENCES afiliados(id)
 )
 
 --Create table autorizacion
@@ -33,7 +34,8 @@ CREATE TABLE autorizacion (
     regimen VARCHAR(250),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (id) REFERENCES afiliados(id)
+    afiliados_id INTEGER,
+    FOREIGN KEY (afiliados_id) REFERENCES afiliados(id)
 )
 
 --Create table medicamento
@@ -50,6 +52,8 @@ CREATE TABLE autorizacion_medicamento (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (id) REFERENCES autorizacion(id),
-    FOREIGN KEY (id) REFERENCES medicamento(id)
+    autorizacion_id INTEGER,
+    medicamento_id INTEGER,
+    FOREIGN KEY (autorizacion_id) REFERENCES autorizacion(id),
+    FOREIGN KEY (medicamento_id) REFERENCES medicamento(id)
 )

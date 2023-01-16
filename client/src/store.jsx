@@ -10,12 +10,27 @@ import {
   deleteAfiliadoReducer
 } from './reducers/afiliadosReducers';
 
+import {
+  listAutorizacionReducer,
+  detailsAutorizacionReducer,
+  createAutorizacionReducer,
+  updateAutorizacionReducer,
+  deleteAutorizacionReducer
+} from './reducers/autorizacionReducers';
+
 const reducer = combineReducers({
+  // * Afiliados
   afiliadosList: listAfiliadosReducer,
   afiliadoDetail: detailsAfiliadoReducer,
   afiliadoCreate: createAfiliadoReducer,
   afiliadoUpdate: updateAfiliadoReducer,
-  afiliadoDelete: deleteAfiliadoReducer
+  afiliadoDelete: deleteAfiliadoReducer,
+  // * Autorizacion
+  autorizacionList: listAutorizacionReducer,
+  autorizacionDetail: detailsAutorizacionReducer,
+  autorizacionCreate: createAutorizacionReducer,
+  autorizacionUpdate: updateAutorizacionReducer,
+  autorizacionDelete: deleteAutorizacionReducer
 });
 
 const middleware = [thunk];

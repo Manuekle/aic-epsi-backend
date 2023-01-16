@@ -32,7 +32,7 @@ function DetailAfiliado() {
             Datos del Afiliado
           </h1>
           <Link
-            to="/createAuthorization"
+            to={`/createAuthorization/${params.id}`}
             className="text-white hover:text-amber-400 font-bold rounded flex flex-row gap-3 items-center"
           >
             <FolderNotchOpen size={20} weight="fill" />

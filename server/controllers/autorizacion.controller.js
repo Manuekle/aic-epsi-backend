@@ -32,17 +32,23 @@ export const getAutorizacion = async (req, res) => {
 export const createAutorizacion = async (req, res) => {
   try {
     const {
-      afiliado,
       diagnostico_principal,
       diagnostico_relacionado,
       regimen,
+      afiliados_id
     } = req.body;
 
     const [result] = await pool.query(
-      "INSERT INTO autorizacion(afiliado, diagnostico_principal, diagnostico_relacionado, regimen) VALUES (?, ?, ?, ?)",
-      [afiliado, diagnostico_principal, diagnostico_relacionado, regimen]
+      "INSERT INTO autorizacion(diagnostico_principal, diagnostico_relacionado, regimen, afiliados_id) VALUES (?, ?, ?, ?)",
+      [diagnostico_principal, diagnostico_relacionado, regimen, afiliados_id]
     );
-    return res.status(201).json({ message: "Autorizacion creada" });
+    return res.status(201).json({
+      id: result.insertId,
+      diagnostico_principal,
+      diagnostico_relacionado,
+      regimen,
+      afiliados_id
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
