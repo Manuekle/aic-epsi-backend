@@ -203,7 +203,7 @@ function EditAfiliado() {
             >
               {({ errors, values }) => (
                 <Form
-                  className="py-8 grid grid-cols-1 gap-6"
+                  className="py-8 flex flex-col gap-6 w-full"
                   autoComplete="off"
                   noValidate
                 >

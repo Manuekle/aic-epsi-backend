@@ -60,19 +60,19 @@ function DetailAfiliado() {
             <div className="text-white">{error}</div>
           ) : (
             <div className="grid grid-cols-3 gap-8 pb-8">
-              <span>
+              <span className="col-span-3 xl:col-span-1">
                 <h1 className="text-zinc-100 font-bold">Nombre:</h1>
                 <h1 className="text-zinc-100 tracking-wider capitalize">
                   {afiliados.nombre}
                 </h1>
               </span>
-              <span>
+              <span className="col-span-3 xl:col-span-1">
                 <h1 className="text-zinc-100 font-bold">Tipo de Documento:</h1>
                 <h1 className="text-zinc-100 tracking-wider capitalize">
                   {afiliados.tipo_documento}
                 </h1>
               </span>
-              <span>
+              <span className="col-span-3 xl:col-span-1">
                 <h1 className="text-zinc-100 font-bold">
                   Numero de Documento:
                 </h1>
@@ -80,13 +80,13 @@ function DetailAfiliado() {
                   {afiliados.numero_documento}
                 </h1>
               </span>
-              <span>
+              <span className="col-span-3 xl:col-span-1">
                 <h1 className="text-zinc-100 font-bold">Correo Electronico:</h1>
                 <h1 className="text-zinc-100 tracking-wider">
                   {afiliados.correo_electronico}
                 </h1>
               </span>
-              <span>
+              <span className="col-span-3 xl:col-span-1">
                 <h1 className="text-zinc-100 font-bold">Género:</h1>
                 <h1 className="text-zinc-100 flex flex-row gap-2 items-center tracking-wider capitalize">
                   {afiliados.genero === 'Masculino' && (
@@ -101,25 +101,25 @@ function DetailAfiliado() {
                   {afiliados.genero}
                 </h1>
               </span>
-              <span>
+              <span className="col-span-3 xl:col-span-1">
                 <h1 className="text-zinc-100 font-bold">Estado Civil:</h1>
                 <h1 className="text-zinc-100 tracking-wider capitalize">
                   {afiliados.estado_civil}
                 </h1>
               </span>
-              <span>
+              <span className="col-span-3 xl:col-span-1">
                 <h1 className="text-zinc-100 font-bold">Municipio:</h1>
                 <h1 className="text-zinc-100 tracking-wider capitalize">
                   {afiliados.municipio}
                 </h1>
               </span>
-              <span>
+              <span className="col-span-3 xl:col-span-1">
                 <h1 className="text-zinc-100 font-bold">Departamento:</h1>
                 <h1 className="text-zinc-100 tracking-wider capitalize">
                   {afiliados.departamento}
                 </h1>
               </span>
-              <span>
+              <span className="col-span-3 xl:col-span-1">
                 <h1 className="text-zinc-100 font-bold">Dirección:</h1>
                 <h1 className="text-zinc-100 tracking-wider capitalize">
                   {afiliados.direccion}

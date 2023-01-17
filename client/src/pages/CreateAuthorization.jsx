@@ -121,7 +121,7 @@ function CreateAuthorization() {
             >
               {({ errors, values }) => (
                 <Form
-                  className="py-8 grid grid-cols-1 gap-6"
+                  className="py-8 flex flex-col gap-6 w-full"
                   autoComplete="off"
                   noValidate
                 >
@@ -276,7 +276,7 @@ function CreateAuthorization() {
                           type="checkbox"
                           name="medicamento"
                           id="toggle"
-                          className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                          className="appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-amber-400 checked:border-amber-400 fill-black focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                         />
                         <label
                           htmlFor="medicamento"

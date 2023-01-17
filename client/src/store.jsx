@@ -18,6 +18,12 @@ import {
   deleteAutorizacionReducer
 } from './reducers/autorizacionReducers';
 
+import {
+  listIndigenaReducer,
+  detailsIndigenaReducer,
+  createIndigenaReducer
+} from './reducers/indigenaReducers';
+
 const reducer = combineReducers({
   // * Afiliados
   afiliadosList: listAfiliadosReducer,
@@ -30,7 +36,11 @@ const reducer = combineReducers({
   autorizacionDetail: detailsAutorizacionReducer,
   autorizacionCreate: createAutorizacionReducer,
   autorizacionUpdate: updateAutorizacionReducer,
-  autorizacionDelete: deleteAutorizacionReducer
+  autorizacionDelete: deleteAutorizacionReducer,
+  // * Indigena
+  indigenaList: listIndigenaReducer,
+  indigenaDetail: detailsIndigenaReducer,
+  indigenaCreate: createIndigenaReducer
 });
 
 const middleware = [thunk];

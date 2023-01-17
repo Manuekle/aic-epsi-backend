@@ -8,6 +8,7 @@ import { PORT, HOSTNAME } from "./config.js";
 import indexRoutes from "./routes/index.routes.js";
 import afiliadosRoutes from "./routes/afiliados.routes.js";
 import autorizacionRoutes from "./routes/autorizacion.routes.js";
+import indigenaRoutes from "./routes/indigena.routes.js";
 
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(indexRoutes);
 app.use(afiliadosRoutes);
 app.use(autorizacionRoutes);
+app.use(indigenaRoutes);
 
 app.use(express.static(join(__dirname, "../client/dist")));
 
