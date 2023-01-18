@@ -22,10 +22,12 @@ function DetailAfiliado() {
   const { loading, error, afiliados } = afiliadoDetail;
 
   useEffect(() => {
-    dispatch(getAfiliadoDetails(params.id));
+    if (params.id) {
+      dispatch(getAfiliadoDetails(params.id));
+    }
   }, [dispatch, params]);
 
-  // console.log(afiliados);
+  console.log(afiliados);
   return (
     <motion.div
       initial={{ y: 300, opacity: 0 }}
@@ -125,6 +127,24 @@ function DetailAfiliado() {
                   {afiliados.direccion}
                 </h1>
               </span>
+              {afiliados.indigena ? (
+                <>
+                  <span className="col-span-3 xl:col-span-1">
+                    <h1 className="text-zinc-100 font-bold">Pueblo:</h1>
+                    <h1 className="text-zinc-100 tracking-wider capitalize">
+                      {afiliados.pueblo}
+                    </h1>
+                  </span>
+                  <span className="col-span-3 xl:col-span-1">
+                    <h1 className="text-zinc-100 font-bold">Cabildo:</h1>
+                    <h1 className="text-zinc-100 tracking-wider capitalize">
+                      {afiliados.cabildo}
+                    </h1>
+                  </span>
+                </>
+              ) : (
+                ''
+              )}
             </div>
           )}
         </div>

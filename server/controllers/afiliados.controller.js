@@ -41,10 +41,12 @@ export const createAfiliado = async (req, res) => {
       direccion,
       correo_electronico,
       indigena,
+      pueblo,
+      cabildo
     } = req.body;
     
     const [result] = await pool.query(
-      "INSERT INTO afiliados(nombre, tipo_documento, numero_documento, genero, estado_civil, municipio, departamento, direccion, correo_electronico, indigena) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO afiliados(nombre, tipo_documento, numero_documento, genero, estado_civil, municipio, departamento, direccion, correo_electronico, indigena, pueblo, cabildo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
         nombre,
         tipo_documento,
@@ -55,7 +57,9 @@ export const createAfiliado = async (req, res) => {
         departamento,
         direccion,
         correo_electronico,
-        indigena
+        indigena,
+        pueblo,
+        cabildo
       ]
     );
 
@@ -71,6 +75,8 @@ export const createAfiliado = async (req, res) => {
       direccion,
       correo_electronico,
       indigena,
+      pueblo,
+      cabildo
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });

@@ -57,7 +57,9 @@ function EditAfiliado() {
     municipio: '',
     departamento: '',
     direccion: '',
-    indigena: ''
+    indigena: '',
+    pueblo: '',
+    cabildo: ''
   });
 
   const afiliadoUpdate = useSelector((state) => state.afiliadoUpdate);
@@ -82,7 +84,9 @@ function EditAfiliado() {
           municipio: afiliados.municipio,
           departamento: afiliados.departamento,
           direccion: afiliados.direccion,
-          indigena: afiliados.indigena
+          indigena: afiliados.indigena,
+          pueblo: afiliados.pueblo,
+          cabildo: afiliados.cabildo
         });
       }
     };

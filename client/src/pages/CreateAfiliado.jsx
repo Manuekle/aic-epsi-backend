@@ -28,13 +28,11 @@ import {
   FlagBanner
 } from 'phosphor-react';
 import { AFILIADOS_CREATE_RESET } from '../constants/afiliadosConstants';
-import { INDIGENA_CREATE_RESET } from '../constants/indigenaConstants';
 
 import { generos, tipoDocumento, estadoCivil } from '../utils/constantes';
 import { departamentos } from '../utils/departamentos';
 
 import { createAfiliado } from '../actions/afiliadosActions';
-import { createIndigena } from '../actions/indigenaActions';
 
 // loader
 import Loader from '../components/loader';
@@ -47,18 +45,14 @@ function CreateAfiliado() {
   const afiliadoCreate = useSelector((state) => state.afiliadoCreate);
   const { success: successCreate } = afiliadoCreate;
 
-  const indigenaCreate = useSelector((state) => state.indigenaCreate);
-  const { success: successIndigena } = indigenaCreate;
-
   useEffect(() => {
-    if (successCreate || successIndigena) {
+    if (successCreate) {
       dispatch({ type: AFILIADOS_CREATE_RESET });
-      dispatch({ type: INDIGENA_CREATE_RESET });
       setTimeout(() => {
         navigate('/');
       }, 1000);
     }
-  }, [dispatch, navigate, successCreate, successIndigena]);
+  }, [dispatch, navigate, successCreate]);
 
   // console.log(departamentos);
   return (
@@ -175,16 +169,13 @@ function CreateAfiliado() {
               resetForm();
               setFormData(true);
               dispatch(createAfiliado(res));
-              if (res.indigena) {
-                dispatch(createIndigena(res.pueblo, res.cabildo));
-              }
               setTimeout(() => {
                 setFormData(false);
               }, 1000);
               return res;
             }}
           >
-            {({ errors, values }) => (
+            {({ errors, values, setFieldValue }) => (
               <Form
                 className="py-8 flex flex-col gap-6 w-full"
                 autoComplete="off"
@@ -498,6 +489,10 @@ function CreateAfiliado() {
                         type="checkbox"
                         name="indigena"
                         id="toggle"
+                        onClick={() => {
+                          setFieldValue('pueblo', '');
+                          setFieldValue('cabildo', '');
+                        }}
                         className="appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-amber-400 checked:border-amber-400 fill-black focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                       />
                       <label

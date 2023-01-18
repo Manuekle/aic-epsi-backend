@@ -35,18 +35,20 @@ export const createAutorizacion = async (req, res) => {
       diagnostico_principal,
       diagnostico_relacionado,
       regimen,
+      medicamento,
       afiliados_id
     } = req.body;
 
     const [result] = await pool.query(
-      "INSERT INTO autorizacion(diagnostico_principal, diagnostico_relacionado, regimen, afiliados_id) VALUES (?, ?, ?, ?)",
-      [diagnostico_principal, diagnostico_relacionado, regimen, afiliados_id]
+      "INSERT INTO autorizacion(diagnostico_principal, diagnostico_relacionado, regimen, medicamento, afiliados_id) VALUES (?, ?, ?, ?, ?)",
+      [diagnostico_principal, diagnostico_relacionado, regimen, medicamento, afiliados_id]
     );
     return res.status(201).json({
       id: result.insertId,
       diagnostico_principal,
       diagnostico_relacionado,
       regimen,
+      medicamento,
       afiliados_id
     });
   } catch (error) {

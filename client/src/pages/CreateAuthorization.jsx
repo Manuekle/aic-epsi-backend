@@ -1,10 +1,12 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable radix */
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unstable-nested-components */
 import React, { useState, useEffect } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field, ErrorMessage, useField } from 'formik';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Syringe, Activity, FirstAidKit, BookmarkSimple } from 'phosphor-react';
@@ -53,6 +55,17 @@ function CreateAuthorization() {
     }
   }, [dispatch, successCreate, navigate, params]);
 
+  function TextArea({ label, ...props }) {
+    const [field, meta] = useField(props);
+    return (
+      <textarea
+        className="relative w-full bg-zinc-800 border border-zinc-600 placeholder:text-white/70 text-white rounded-md px-4 py-2 text-sm font-bold outline-none"
+        {...field}
+        {...props}
+      />
+    );
+  }
+
   return (
     <motion.div
       initial={{ y: 300, opacity: 0 }}
@@ -80,9 +93,10 @@ function CreateAuthorization() {
                 diagnostico_principal: '',
                 diagnostico_relacionado: '',
                 regimen: '',
+                isMedicamento: false,
+                medicamento: '',
                 enfermedad: '',
-                afiliados_id: params.id,
-                medicamento: false
+                afiliados_id: params.id
               }}
               validate={(res) => {
                 const error = {};
@@ -107,6 +121,13 @@ function CreateAuthorization() {
                   error.regimen = 'Por favor seleccione un regimen';
                 }
 
+                if (res.isMedicamento) {
+                  // Validacion cabildo
+                  if (!res.medicamento) {
+                    error.medicamento = 'Por favor ingrese el medicamento';
+                  }
+                }
+
                 return error;
               }}
               onSubmit={(res, { resetForm }) => {
@@ -119,7 +140,7 @@ function CreateAuthorization() {
                 return res;
               }}
             >
-              {({ errors, values }) => (
+              {({ errors, values, setFieldValue }) => (
                 <Form
                   className="py-8 flex flex-col gap-6 w-full"
                   autoComplete="off"
@@ -270,16 +291,41 @@ function CreateAuthorization() {
                         )}
                       />
                     </div>
-                    <div className="cxl:col-span-1 col-span-3">
+                    {values.isMedicamento ? (
+                      <div className="col-span-4">
+                        <span className="text-white font-bold text-sm flex flex-row gap-1 items-center">
+                          <TextArea
+                            label="medicamento"
+                            name="medicamento"
+                            rows="6"
+                            placeholder="Escriba los medicamentos que requiere el paciente"
+                          />
+                        </span>
+                        <ErrorMessage
+                          name="medicamento"
+                          component={() => (
+                            <div className="text-red-500 text-xs pl-1 pt-2 font-bold tracking-wide">
+                              {errors.medicamento}
+                            </div>
+                          )}
+                        />
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    <div className="col-span-4">
                       <span className="text-white font-bold text-sm flex flex-row gap-1 items-center">
                         <Field
                           type="checkbox"
-                          name="medicamento"
+                          name="isMedicamento"
                           id="toggle"
+                          onClick={() => {
+                            setFieldValue('medicamento', '');
+                          }}
                           className="appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-amber-400 checked:border-amber-400 fill-black focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                         />
                         <label
-                          htmlFor="medicamento"
+                          htmlFor="isMedicamento"
                           className="text-sm font-bold text-white"
                         >
                           ¿El paciente requiere medicamento?
@@ -288,30 +334,21 @@ function CreateAuthorization() {
                     </div>
                   </div>
                   <div className="xl:col-span-1 col-span-3 flex justify-center">
-                    {values.medicamento ? (
-                      <button
-                        type="submit"
-                        className="text-sm text-white border font-bold tracking-wide rounded-md border-white/20 bg-zinc-800 w-56 h-10"
-                      >
-                        Siguiente
-                      </button>
-                    ) : (
-                      <button
-                        type="submit"
-                        className="text-sm text-white border font-bold tracking-wide rounded-md border-white/20 bg-zinc-800 w-56 h-10"
-                      >
-                        {!formData && (
-                          <h1 className="text-white/80 hover:text-white text-sm font-normal flex justify-center">
-                            Crear Autorización
-                          </h1>
-                        )}
-                        {formData && (
-                          <span className="flex justify-center ">
-                            <Loader color="#eee" size={20} />
-                          </span>
-                        )}
-                      </button>
-                    )}
+                    <button
+                      type="submit"
+                      className="text-sm text-white border font-bold tracking-wide rounded-md border-white/20 bg-zinc-800 w-56 h-10"
+                    >
+                      {!formData && (
+                        <h1 className="text-white/80 hover:text-white text-sm font-normal flex justify-center">
+                          Crear Autorización
+                        </h1>
+                      )}
+                      {formData && (
+                        <span className="flex justify-center ">
+                          <Loader color="#eee" size={20} />
+                        </span>
+                      )}
+                    </button>
                   </div>
                 </Form>
               )}

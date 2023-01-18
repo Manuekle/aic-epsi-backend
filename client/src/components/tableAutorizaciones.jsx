@@ -1,10 +1,32 @@
+/* eslint-disable radix */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { Eye } from 'phosphor-react';
 import { Link } from 'react-router-dom';
+import {
+  diagnosticoPrincipal,
+  diagnosticoRelacionado
+} from '../utils/constantes';
 
 function tableAutorizaciones({ data }) {
+  const filterDiagnosticoPrincipal = (id) => {
+    const e = parseInt(id);
+    const diagnosticos = diagnosticoPrincipal.filter(
+      (diagnostico) => diagnostico.id === e
+    );
+    // console.log(diagnosticos[0].name);
+    return diagnosticos[0].name;
+  };
+  const filterDiagnosticoRelacionado = (id) => {
+    const e = parseInt(id);
+    const diagnosticos = diagnosticoRelacionado.filter(
+      (diagnostico) => diagnostico.id === e
+    );
+    // console.log(diagnosticos[0].name);
+    return diagnosticos[0].name;
+  };
+
   const formatDate = (date) => {
     const d = new Date(date);
     const month = d.toLocaleString('default', { month: 'long' });
@@ -18,10 +40,10 @@ function tableAutorizaciones({ data }) {
         <h1>{data.afiliados_id}</h1>
       </td>
       <td className="text-white/80 text-sm font-normal px-6 py-4 text-left capitalize tracking-wide">
-        <h1>{data.diagnostico_principal}</h1>
+        <h1>{filterDiagnosticoPrincipal(data.diagnostico_principal)}</h1>
       </td>
       <td className="text-white/80 text-sm font-normal px-6 py-4 text-left capitalize tracking-wide">
-        <h1>{data.diagnostico_relacionado}</h1>
+        <h1>{filterDiagnosticoRelacionado(data.diagnostico_relacionado)}</h1>
       </td>
       <td className="text-white/80 text-sm font-normal px-6 py-4 text-left capitalize tracking-wide">
         <h1>{formatDate(data.created_at)}</h1>
