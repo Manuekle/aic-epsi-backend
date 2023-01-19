@@ -48,7 +48,7 @@ function Autorizacion({ data, setIsOpen }) {
         <span className="col-span-2 xl:col-span-1">
           <h1 className="text-zinc-100 font-bold">Afiliado:</h1>
           <h1 className="text-zinc-100 tracking-wider capitalize">
-            {data.afiliados_id}
+            {data.nombre}
           </h1>
         </span>
         <span className="col-span-2 xl:col-span-1">

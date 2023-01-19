@@ -5,7 +5,7 @@ import { pool } from "../db.js";
 export const getAutorizaciones = async (req, res) => {
   try {
     const [result] = await pool.query(
-      "SELECT * FROM autorizacion ORDER BY created_at ASC"
+      "SELECT * FROM afiliados LEFT JOIN autorizacion ON autorizacion.afiliados_id = autorizacion.id"
     );
     return res.status(200).json(result);
   } catch (error) {

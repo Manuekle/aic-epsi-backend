@@ -37,7 +37,7 @@ function tableAutorizaciones({ data, setIsOpen }) {
   return (
     <tr className="text-white/80 text-sm text-normal transition duration-300 ease-in-out hover:bg-zinc-800">
       <td className="text-white/80 text-sm font-normal px-6 py-4 text-left capitalize tracking-wide">
-        <h1>{data.afiliados_id}</h1>
+        <h1>{data.nombre}</h1>
       </td>
       <td className="text-white/80 text-sm font-normal px-6 py-4 text-left capitalize tracking-wide">
         <h1>{filterDiagnosticoPrincipal(data.diagnostico_principal)}</h1>
