@@ -1,12 +1,15 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-console */
 import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion, useCycle } from 'framer-motion';
 import { listAutorizaciones } from '../actions/autorizacionActions';
 import Pagination from '../components/pagination';
 import Loader from '../components/loader';
+import Autorizacion from '../components/autorizacion';
 
 import TableAutorizaciones from '../components/tableAutorizaciones';
 
@@ -14,6 +17,8 @@ function HistoryAuthorization() {
   const dispatch = useDispatch();
   const location = useLocation();
   const keyword = location.search;
+
+  const [isOpen, setIsOpen] = useCycle(false, true);
 
   useEffect(() => {
     dispatch(listAutorizaciones(keyword));
@@ -101,7 +106,31 @@ function HistoryAuthorization() {
                       </thead>
                       <tbody>
                         {currentTableData.map((data) => (
-                          <TableAutorizaciones key={data.id} data={data} />
+                          <>
+                            <TableAutorizaciones
+                              key={data.id}
+                              data={data}
+                              setIsOpen={setIsOpen}
+                            />
+                            <AnimatePresence exitBeforeEnter>
+                              {isOpen ? (
+                                <motion.div
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  exit={{ opacity: 0 }}
+                                  transition={{ duration: 0.2 }}
+                                  className="fixed top-0 left-0 w-screen h-screen z-50 bg-black/50"
+                                >
+                                  <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                    <Autorizacion
+                                      data={data}
+                                      setIsOpen={setIsOpen}
+                                    />
+                                  </div>
+                                </motion.div>
+                              ) : null}
+                            </AnimatePresence>
+                          </>
                         ))}
                       </tbody>
                     </table>

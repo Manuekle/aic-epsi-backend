@@ -1,15 +1,15 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable radix */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { Eye } from 'phosphor-react';
-import { Link } from 'react-router-dom';
 import {
   diagnosticoPrincipal,
   diagnosticoRelacionado
 } from '../utils/constantes';
 
-function tableAutorizaciones({ data }) {
+function tableAutorizaciones({ data, setIsOpen }) {
   const filterDiagnosticoPrincipal = (id) => {
     const e = parseInt(id);
     const diagnosticos = diagnosticoPrincipal.filter(
@@ -56,9 +56,9 @@ function tableAutorizaciones({ data }) {
         </div>
       </td>
       <td className="text-white/80 text-sm font-normal px-6 py-4 text-left capitalize tracking-wide">
-        <Link to={`/autorizaciones/${data.id}`}>
+        <button type="button" onClick={() => setIsOpen(true)}>
           <Eye size={20} className="hover:text-amber-400" />
-        </Link>
+        </button>
       </td>
     </tr>
   );
